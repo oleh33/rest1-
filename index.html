@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GrandPalace Hotel</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --gold:#B8965A;
+    --gold-light:#D4AF7A;
+    --dark:#1A1612;
+    --cream:#F9F5EE;
+    --text:#3A3330;
+    --muted:#7A6F68;
+  }
+  body{font-family:'Jost',sans-serif;background:var(--cream);color:var(--text);overflow-x:hidden}
+  nav{
+    position:sticky;top:0;z-index:100;
+    display:flex;align-items:center;justify-content:space-between;
+    padding:18px 48px;
+    background:rgba(249,245,238,0.95);
+    backdrop-filter:blur(8px);
+    border-bottom:1px solid rgba(184,150,90,0.2);
+  }
+  .logo{font-family:'Playfair Display',serif;font-size:22px;letter-spacing:2px;color:var(--dark)}
+  .logo span{color:var(--gold)}
+  .nav-links{display:flex;gap:32px;list-style:none}
+  .nav-links a{font-size:13px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);text-decoration:none;transition:color .2s}
+  .nav-links a:hover{color:var(--gold)}
+  .nav-btn{
+    font-family:'Jost',sans-serif;font-size:12px;letter-spacing:1.5px;text-transform:uppercase;
+    padding:10px 24px;background:var(--gold);color:#fff;border:none;cursor:pointer;transition:background .2s
+  }
+  .nav-btn:hover{background:var(--gold-light)}
+
+  .hero{
+    position:relative;min-height:92vh;
+    display:flex;align-items:center;justify-content:center;flex-direction:column;
+    background:
+      linear-gradient(to bottom, rgba(26,22,18,0.55) 0%, rgba(26,22,18,0.35) 60%, rgba(249,245,238,1) 100%),
+      url('https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?w=1400&q=80') center/cover no-repeat;
+    text-align:center;padding:80px 40px 120px;
+  }
+  .hero-tag{font-size:11px;letter-spacing:4px;text-transform:uppercase;color:var(--gold-light);margin-bottom:20px}
+  .hero h1{
+    font-family:'Playfair Display',serif;font-size:clamp(48px,7vw,88px);
+    color:#fff;line-height:1.05;margin-bottom:24px;
+    text-shadow:0 2px 24px rgba(0,0,0,0.3)
+  }
+  .hero h1 em{display:block;font-style:italic;color:var(--gold-light)}
+  .hero p{font-size:16px;color:rgba(255,255,255,0.8);letter-spacing:0.5px;max-width:480px;line-height:1.7;margin-bottom:40px}
+  .hero-cta{display:flex;gap:16px;justify-content:center;flex-wrap:wrap}
+  .btn-primary{
+    padding:16px 40px;background:var(--gold);color:#fff;
+    font-family:'Jost',sans-serif;font-size:13px;letter-spacing:2px;text-transform:uppercase;
+    border:none;cursor:pointer;transition:all .25s
+  }
+  .btn-primary:hover{background:var(--gold-light);transform:translateY(-1px)}
+  .btn-ghost{
+    padding:16px 40px;background:transparent;color:#fff;
+    font-family:'Jost',sans-serif;font-size:13px;letter-spacing:2px;text-transform:uppercase;
+    border:1px solid rgba(255,255,255,0.5);cursor:pointer;transition:all .25s
+  }
+  .btn-ghost:hover{border-color:#fff}
+
+  .booking-bar{
+    background:var(--dark);
+    display:flex;align-items:center;
+    max-width:900px;margin:-32px auto 0;
+    position:relative;z-index:10;
+  }
+  .booking-field{flex:1;padding:20px 24px;border-right:1px solid rgba(255,255,255,0.08)}
+  .booking-field label{display:block;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-bottom:4px}
+  .booking-field input,.booking-field select{
+    width:100%;background:none;border:none;outline:none;
+    font-family:'Jost',sans-serif;font-size:15px;color:#fff;cursor:pointer
+  }
+  .booking-field select option{background:var(--dark)}
+  .book-submit{
+    padding:0 32px;background:var(--gold);
+    font-family:'Jost',sans-serif;font-size:12px;letter-spacing:2px;text-transform:uppercase;
+    color:#fff;border:none;cursor:pointer;height:100%;min-height:80px;
+    transition:background .2s;white-space:nowrap
+  }
+  .book-submit:hover{background:var(--gold-light)}
+
+  .about-wrap{max-width:1100px;margin:100px auto 0;padding:0 40px}
+  .about{display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center}
+  .about-img{
+    position:relative;
+    background:url('https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=800&q=80') center/cover;
+    min-height:480px
+  }
+  .about-img::after{
+    content:'';position:absolute;right:-24px;top:24px;bottom:-24px;left:24px;
+    border:1px solid var(--gold);z-index:-1
+  }
+  .about-content{display:flex;flex-direction:column;justify-content:center}
+  .section-tag{font-size:11px;letter-spacing:4px;text-transform:uppercase;color:var(--gold);margin-bottom:16px}
+  .about-content h2{font-family:'Playfair Display',serif;font-size:clamp(32px,3vw,44px);line-height:1.2;margin-bottom:24px}
+  .about-content p{color:var(--muted);line-height:1.8;margin-bottom:16px;font-weight:300}
+  .stats{display:flex;gap:32px;margin-top:32px;padding-top:32px;border-top:1px solid rgba(184,150,90,0.2)}
+  .stat span{display:block;font-family:'Playfair Display',serif;font-size:36px;color:var(--gold)}
+  .stat small{font-size:12px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted)}
+
+  .section{padding:100px 40px;max-width:1200px;margin:0 auto;text-align:center}
+  .section-header{margin-bottom:60px}
+  .section-header h2{font-family:'Playfair Display',serif;font-size:clamp(36px,4vw,52px);line-height:1.2}
+  .section-header p{color:var(--muted);margin-top:16px;font-weight:300;max-width:500px;margin-left:auto;margin-right:auto}
+  .rooms-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:32px;text-align:left}
+  .room-card{background:#fff;border:1px solid rgba(184,150,90,0.15);overflow:hidden;transition:box-shadow .3s}
+  .room-card:hover{box-shadow:0 16px 40px rgba(184,150,90,0.15)}
+  .room-img{height:220px;background-size:cover;background-position:center}
+  .room-body{padding:28px 28px 32px}
+  .room-type{font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:8px}
+  .room-name{font-family:'Playfair Display',serif;font-size:22px;margin-bottom:12px}
+  .room-desc{font-size:14px;color:var(--muted);line-height:1.7;margin-bottom:20px;font-weight:300}
+  .room-footer{display:flex;align-items:center;justify-content:space-between}
+  .price{font-family:'Playfair Display',serif;font-size:26px}
+  .price small{font-family:'Jost',sans-serif;font-size:12px;color:var(--muted);font-weight:300}
+  .btn-sm{
+    padding:10px 20px;background:transparent;border:1px solid var(--gold);
+    color:var(--gold);font-family:'Jost',sans-serif;font-size:12px;letter-spacing:1.5px;text-transform:uppercase;
+    cursor:pointer;transition:all .2s
+  }
+  .btn-sm:hover{background:var(--gold);color:#fff}
+
+  .amenities{background:var(--dark);padding:100px 40px;text-align:center}
+  .amenities h2{font-family:'Playfair Display',serif;font-size:clamp(32px,4vw,48px);color:#fff;margin-bottom:16px}
+  .amen-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:2px;max-width:900px;margin:0 auto}
+  .amen-item{padding:40px 24px;border:1px solid rgba(255,255,255,0.06);transition:background .2s}
+  .amen-item:hover{background:rgba(184,150,90,0.08)}
+  .amen-icon{font-size:28px;margin-bottom:16px}
+  .amen-item h4{font-family:'Playfair Display',serif;font-size:16px;color:#fff;margin-bottom:8px;font-weight:400}
+  .amen-item p{font-size:13px;color:rgba(255,255,255,0.45);font-weight:300;line-height:1.6}
+
+  .gallery{padding:100px 40px;max-width:1200px;margin:0 auto;text-align:center}
+  .gallery-grid{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    grid-template-rows:200px 200px;
+    gap:12px;
+    margin-top:48px;
+  }
+  .gallery-grid .g1{grid-column:span 2;grid-row:span 2}
+  .gal-item{background-size:cover;background-position:center;overflow:hidden;position:relative}
+  .gal-item::after{content:'';position:absolute;inset:0;background:rgba(26,22,18,0);transition:background .3s}
+  .gal-item:hover::after{background:rgba(26,22,18,0.2)}
+
+  .testimonials{background:#F2EBE0;padding:100px 40px;text-align:center}
+  .testimonials h2{font-family:'Playfair Display',serif;font-size:clamp(32px,4vw,48px);margin-bottom:16px}
+  .reviews{display:grid;grid-template-columns:repeat(3,1fr);gap:32px;max-width:1100px;margin:0 auto;text-align:left}
+  .review{background:#fff;padding:36px;border-left:3px solid var(--gold)}
+  .review-stars{color:var(--gold);font-size:13px;margin-bottom:16px;letter-spacing:2px}
+  .review-text{font-style:italic;font-family:'Playfair Display',serif;font-size:17px;line-height:1.65;margin-bottom:20px;color:var(--text)}
+  .reviewer{font-size:12px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted)}
+
+  .cta{
+    padding:120px 40px;text-align:center;
+    background:
+      linear-gradient(rgba(26,22,18,0.75),rgba(26,22,18,0.75)),
+      url('https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?w=1400&q=80') center/cover
+  }
+  .cta h2{font-family:'Playfair Display',serif;font-size:clamp(36px,5vw,64px);color:#fff;margin-bottom:16px}
+  .cta p{color:rgba(255,255,255,0.65);margin-bottom:40px;font-weight:300;font-size:17px}
+
+  footer{background:var(--dark);color:rgba(255,255,255,0.5);padding:64px 64px 32px;font-size:13px}
+  .footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:48px;margin-bottom:48px}
+  .footer-logo{font-family:'Playfair Display',serif;font-size:24px;color:#fff;margin-bottom:16px}
+  .footer-logo span{color:var(--gold)}
+  footer h5{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#fff;margin-bottom:16px}
+  footer ul{list-style:none}
+  footer ul li{margin-bottom:8px}
+  footer ul a{color:rgba(255,255,255,0.45);text-decoration:none;transition:color .2s;font-weight:300}
+  footer ul a:hover{color:var(--gold)}
+  .footer-bottom{border-top:1px solid rgba(255,255,255,0.08);padding-top:24px;display:flex;justify-content:space-between;align-items:center}
+
+  @media(max-width:900px){
+    nav{padding:14px 20px}
+    .nav-links{display:none}
+    .hero{min-height:70vh;padding:60px 24px 100px}
+    .booking-bar{flex-direction:column;margin:0 20px}
+    .booking-field{border-right:none;border-bottom:1px solid rgba(255,255,255,0.08);width:100%}
+    .book-submit{min-height:56px;width:100%}
+    .about-wrap{padding:0 24px}
+    .about{grid-template-columns:1fr}
+    .about-img{min-height:300px}
+    .rooms-grid{grid-template-columns:1fr}
+    .amen-grid{grid-template-columns:repeat(2,1fr)}
+    .gallery-grid{grid-template-columns:1fr 1fr;grid-template-rows:auto}
+    .gallery-grid .g1{grid-column:span 2;min-height:240px}
+    .gal-item{min-height:160px}
+    .reviews{grid-template-columns:1fr}
+    .footer-grid{grid-template-columns:1fr 1fr;gap:32px}
+    footer{padding:48px 24px 24px}
+    .footer-bottom{flex-direction:column;gap:8px;text-align:center}
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="logo">Grand<span>Palace</span></div>
+  <ul class="nav-links">
+    <li><a href="#">Про нас</a></li>
+    <li><a href="#">Номери</a></li>
+    <li><a href="#">Послуги</a></li>
+    <li><a href="#">Галерея</a></li>
+    <li><a href="#">Контакти</a></li>
+  </ul>
+  <button class="nav-btn">Забронювати</button>
+</nav>
+
+<div class="hero">
+  <p class="hero-tag">Ласкаво просимо до GrandPalace</p>
+  <h1>Розкіш у<em>кожній деталі</em></h1>
+  <p>Відчуйте бездоганний комфорт у самому серці міста. Ваш відпочинок — наша пристрасть.</p>
+  <div class="hero-cta">
+    <button class="btn-primary">Переглянути номери</button>
+    <button class="btn-ghost">Дізнатися більше</button>
+  </div>
+</div>
+
+<div class="booking-bar">
+  <div class="booking-field">
+    <label>Заїзд</label>
+    <input type="date" />
+  </div>
+  <div class="booking-field">
+    <label>Виїзд</label>
+    <input type="date" />
+  </div>
+  <div class="booking-field">
+    <label>Гості</label>
+    <select>
+      <option>1 гість</option>
+      <option>2 гості</option>
+      <option>3 гості</option>
+      <option>4+ гостей</option>
+    </select>
+  </div>
+  <div class="booking-field">
+    <label>Тип номера</label>
+    <select>
+      <option>Будь-який</option>
+      <option>Стандарт</option>
+      <option>Делюкс</option>
+      <option>Сюїт</option>
+    </select>
+  </div>
+  <button class="book-submit">Перевірити наявність</button>
+</div>
+
+<div class="about-wrap">
+  <div class="about">
+    <div class="about-img"></div>
+    <div class="about-content">
+      <p class="section-tag">Наша історія</p>
+      <h2>Більше ніж готель — це ваш дім</h2>
+      <p>GrandPalace відкрив двері у 1998 році і відтоді є символом вишуканості та гостинності. Кожен куточок готелю дихає увагою до деталей і справжньою турботою про гостей.</p>
+      <p>Наша команда з 200+ фахівців цілодобово дбає про те, щоб ваше перебування стало незабутнім спогадом.</p>
+      <div class="stats">
+        <div class="stat"><span>25+</span><small>Років досвіду</small></div>
+        <div class="stat"><span>180</span><small>Розкішних номерів</small></div>
+        <div class="stat"><span>4.9★</span><small>Рейтинг гостей</small></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-header">
+    <p class="section-tag">Розміщення</p>
+    <h2>Номери і сюїти</h2>
+    <p>Від затишних стандартних до неперевершених президентських — оберіть свій ідеал комфорту</p>
+  </div>
+  <div class="rooms-grid">
+    <div class="room-card">
+      <div class="room-img" style="background-image:url('https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=600&q=80')"></div>
+      <div class="room-body">
+        <p class="room-type">Стандарт</p>
+        <h3 class="room-name">Комфорт Кімната</h3>
+        <p class="room-desc">Елегантний простір із великим ліжком, власною ванною кімнатою та видом на сад. Усе необхідне для чудового відпочинку.</p>
+        <div class="room-footer">
+          <div class="price">₴3 200 <small>/ ніч</small></div>
+          <button class="btn-sm">Деталі</button>
+        </div>
+      </div>
+    </div>
+    <div class="room-card">
+      <div class="room-img" style="background-image:url('https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=600&q=80')"></div>
+      <div class="room-body">
+        <p class="room-type">Делюкс</p>
+        <h3 class="room-name">Делюкс з балконом</h3>
+        <p class="room-desc">Просторий номер із приватним балконом, панорамним видом на місто, преміальними зручностями та ванною кімнатою з джакузі.</p>
+        <div class="room-footer">
+          <div class="price">₴5 800 <small>/ ніч</small></div>
+          <button class="btn-sm">Деталі</button>
+        </div>
+      </div>
+    </div>
+    <div class="room-card">
+      <div class="room-img" style="background-image:url('https://images.unsplash.com/photo-1611892440504-42a792e24d32?w=600&q=80')"></div>
+      <div class="room-body">
+        <p class="room-type">Преміум</p>
+        <h3 class="room-name">Президентський Сюїт</h3>
+        <p class="room-desc">Вершина розкоші: дві спальні, вітальня, кухня, тераса з гідромасажною ванною та персональний дворецький 24/7.</p>
+        <div class="room-footer">
+          <div class="price">₴14 500 <small>/ ніч</small></div>
+          <button class="btn-sm">Деталі</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="amenities">
+  <p class="section-tag" style="color:var(--gold);font-size:11px;letter-spacing:4px;text-transform:uppercase;margin-bottom:16px">Послуги</p>
+  <h2>Все для вашого комфорту</h2>
+  <p style="color:rgba(255,255,255,0.45);margin-bottom:60px;font-weight:300">Преміальний сервіс, що перевершує очікування</p>
+  <div class="amen-grid">
+    <div class="amen-item"><div class="amen-icon">♨</div><h4>СПА і велнес</h4><p>Масажі, процедури краси, сауна та басейн</p></div>
+    <div class="amen-item"><div class="amen-icon">🍽</div><h4>Ресторан</h4><p>Авторська кухня від шеф-кухаря з мішленівською зіркою</p></div>
+    <div class="amen-item"><div class="amen-icon">🍸</div><h4>Панорамний бар</h4><p>Коктейлі та вина з видом на місто на 18 поверсі</p></div>
+    <div class="amen-item"><div class="amen-icon">💪</div><h4>Фітнес-центр</h4><p>Обладнання преміум-класу та тренери 24/7</p></div>
+    <div class="amen-item"><div class="amen-icon">🚗</div><h4>Трансфер</h4><p>Зустріч в аеропорту та оренда авто бізнес-класу</p></div>
+    <div class="amen-item"><div class="amen-icon">🎭</div><h4>Конференц-зали</h4><p>Сучасні простори для бізнес-подій та банкетів</p></div>
+    <div class="amen-item"><div class="amen-icon">🛎</div><h4>Консьєрж</h4><p>Персональний помічник для будь-яких побажань</p></div>
+    <div class="amen-item"><div class="amen-icon">🌿</div><h4>Приватний сад</h4><p>Тихий зелений простір для прогулянок та медитацій</p></div>
+  </div>
+</div>
+
+<div class="gallery">
+  <p class="section-tag">Галерея</p>
+  <h2 style="font-family:'Playfair Display',serif;font-size:clamp(36px,4vw,52px);margin-bottom:16px">Атмосфера GrandPalace</h2>
+  <p style="color:var(--muted);font-weight:300">Зануртесь у світ елегантності та спокою</p>
+  <div class="gallery-grid">
+    <div class="gal-item g1" style="background-image:url('https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?w=800&q=80')"></div>
+    <div class="gal-item" style="background-image:url('https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?w=400&q=80')"></div>
+    <div class="gal-item" style="background-image:url('https://images.unsplash.com/photo-1540518614846-7eded433c457?w=400&q=80')"></div>
+    <div class="gal-item" style="background-image:url('https://images.unsplash.com/photo-1566073771259-6a8506099945?w=400&q=80')"></div>
+    <div class="gal-item" style="background-image:url('https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=400&q=80')"></div>
+  </div>
+</div>
+
+<div class="testimonials">
+  <p class="section-tag">Відгуки</p>
+  <h2>Що кажуть наші гості</h2>
+  <p style="color:var(--muted);font-weight:300;margin-bottom:60px">Більше 12 000 задоволених гостей з усього світу</p>
+  <div class="reviews">
+    <div class="review">
+      <div class="review-stars">★★★★★</div>
+      <p class="review-text">«Найкраще місце, де ми коли-небудь зупинялись. Персонал передбачав кожне наше бажання ще до того, як ми встигали його озвучити.»</p>
+      <p class="reviewer">Олена та Максим К. — Київ</p>
+    </div>
+    <div class="review">
+      <div class="review-stars">★★★★★</div>
+      <p class="review-text">«Вечеря в ресторані — це окремий шедевр. А вид із панорамного бару вночі просто забирає дихання. Повернемось обов'язково.»</p>
+      <p class="reviewer">Sophia R. — Варшава</p>
+    </div>
+    <div class="review">
+      <div class="review-stars">★★★★★</div>
+      <p class="review-text">«Відмічали весілля у GrandPalace. Команда зробила все ідеально. Гості до цих пір розповідають про незабутній вечір.»</p>
+      <p class="reviewer">Andrei & Marina V. — Берлін</p>
+    </div>
+  </div>
+</div>
+
+<div class="cta">
+  <p class="section-tag" style="color:var(--gold-light);font-size:11px;letter-spacing:4px;text-transform:uppercase;margin-bottom:16px">Спеціальна пропозиція</p>
+  <h2>Забронюйте зараз — заощадьте 20%</h2>
+  <p>Раннє бронювання відкриває двері до виняткових привілеїв та кращих цін сезону</p>
+  <button class="btn-primary" style="font-size:14px">Забронювати зі знижкою</button>
+</div>
+
+<footer>
+  <div class="footer-grid">
+    <div>
+      <div class="footer-logo">Grand<span>Palace</span></div>
+      <p style="font-weight:300;line-height:1.8;max-width:280px">Розкіш, смак і бездоганний сервіс — з 1998 року. Ваш найкращий вибір для відпочинку та ділових поїздок.</p>
+    </div>
+    <div>
+      <h5>Навігація</h5>
+      <ul>
+        <li><a href="#">Головна</a></li>
+        <li><a href="#">Про готель</a></li>
+        <li><a href="#">Номери</a></li>
+        <li><a href="#">Послуги</a></li>
+        <li><a href="#">Галерея</a></li>
+      </ul>
+    </div>
+    <div>
+      <h5>Послуги</h5>
+      <ul>
+        <li><a href="#">СПА та велнес</a></li>
+        <li><a href="#">Ресторан</a></li>
+        <li><a href="#">Конференції</a></li>
+        <li><a href="#">Весілля</a></li>
+        <li><a href="#">Трансфер</a></li>
+      </ul>
+    </div>
+    <div>
+      <h5>Контакти</h5>
+      <ul>
+        <li><a href="#">вул. Хрещатик, 1, Київ</a></li>
+        <li><a href="#">+380 44 123 45 67</a></li>
+        <li><a href="#">info@grandpalace.ua</a></li>
+        <li style="margin-top:16px"><a href="#">Instagram</a></li>
+        <li><a href="#">Facebook</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2024 GrandPalace Hotel. Усі права захищені.</p>
+    <p>Політика конфіденційності · Умови використання</p>
+  </div>
+</footer>
+
+</body>
+</html>
