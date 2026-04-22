@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UML — Система масового обслуговування</title>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', sans-serif; background: #f0f2f8; padding: 32px 24px; }
+  h1 { font-size: 20px; font-weight: 600; color: #1a1a2e; margin-bottom: 4px; }
+  .subtitle { font-size: 13px; color: #666; margin-bottom: 24px; }
+  .card { background: #fff; border-radius: 16px; box-shadow: 0 4px 24px rgba(0,0,0,0.08); padding: 32px; overflow-x: auto; }
+  .mermaid { display: flex; justify-content: center; }
+  .footer { margin-top: 16px; font-size: 12px; color: #999; text-align: center; }
+</style>
+</head>
+<body>
+
+<h1>UML-діаграма класів</h1>
+<p class="subtitle">Система масового обслуговування клієнтів для закладу харчування — Яницький М.Л.</p>
+
+<div class="card">
+  <div class="mermaid">
+classDiagram
+  direction TB
+
+  class ClientType {
+    REGULAR = 10
+    LOYAL = 20
+    VIP = 30
+  }
+
+  class OrderStatus {
+    PENDING
+    IN_PROGRESS
+    READY
+    COMPLETED
+  }
+
+  class TableStatus {
+    FREE
+    RESERVED
+    OCCUPIED
+  }
+
+  class Client {
+    -id UUID
+    -name str
+    -client_type ClientType
+    -bonus_points int
+    -arrived_at datetime
+    +base_priority() int
+  }
+
+  class MenuItem {
+    -id UUID
+    -name str
+    -price float
+    -category str
+    -available bool
+  }
+
+  class OrderItem {
+    -menu_item MenuItem
+    -quantity int
+    +subtotal() float
+  }
+
+  class Order {
+    -id UUID
+    -client Client
+    -items List
+    -status OrderStatus
+    -created_at datetime
+    +total() float
+    +next_status() void
+  }
+
+  class Table {
+    -id UUID
+    -hall_id UUID
+    -seats int
+    -status TableStatus
+  }
+
+  class Hall {
+    -id UUID
+    -name str
+    -tables List
+  }
+
+  class Waiter {
+    -id UUID
+    -name str
+    -level str
+    -active_tables int
+  }
+
+  class Reservation {
+    -client Client
+    -table Table
+    -waiter Waiter
+    -hall Hall
+    -guests int
+    -is_seated bool
+    -is_closed bool
+  }
+
+  class PriorityQueue {
+    -_heap list
+    +enqueue(client) void
+    +dequeue() Client
+    +peek_all() List
+    +aging() void
+    +is_empty() bool
+  }
+
+  class DiscountStrategy {
+    +apply(total) float
+  }
+
+  class NoDiscount {
+    +apply(total) float
+  }
+
+  class LoyalDiscount {
+    +apply(total) float
+  }
+
+  class VIPDiscount {
+    +apply(total) float
+  }
+
+  class OrderService {
+    -discount DiscountStrategy
+    +create_order(client) Order
+    +add_item(order, item, qty) void
+    +calculate_total(order) float
+    +advance_status(order) void
+  }
+
+  class PaymentService {
+    +process(order, method) bool
+    +generate_receipt(order) str
+  }
+
+  class EventBus {
+    -_instance EventBus
+    -_subscribers dict
+    +subscribe(event, cb) void
+    +publish(event, data) void
+  }
+
+  class MetricsCollector {
+    -events list
+    +collect(event) void
+    +avg_wait_time() float
+    +total_served() int
+    +avg_check() float
+  }
+
+  class ReportGenerator {
+    +daily_report() str
+    +weekly_report() str
+    +staff_report() str
+    +menu_report() str
+  }
+
+  class RestaurantSystem {
+    -queue PriorityQueue
+    -orders OrderService
+    -payments PaymentService
+    -bus EventBus
+    +register_client(name, type) Client
+    +serve_next() Client
+    +place_order(client) Order
+    +get_queue_status() list
+  }
+
+  class ConsoleUI {
+    -system RestaurantSystem
+    +run() void
+    +show_menu() void
+    +handle_input() void
+    +display_queue() void
+    +print_receipt() void
+  }
+
+  Client ..> ClientType : uses
+  Order ..> OrderStatus : uses
+  Table ..> TableStatus : uses
+
+  Order *-- OrderItem : composition
+  OrderItem --> MenuItem
+  Client "1" --> "0..*" Order : has
+  Hall o-- Table : aggregation
+  Reservation --> Client
+  Reservation --> Table
+  Reservation --> Waiter
+  Reservation --> Hall
+
+  PriorityQueue o-- Client : queue
+  NoDiscount --|> DiscountStrategy
+  LoyalDiscount --|> DiscountStrategy
+  VIPDiscount --|> DiscountStrategy
+  OrderService ..> DiscountStrategy : Strategy
+  OrderService ..> Order : creates
+  PaymentService ..> Order : processes
+
+  MetricsCollector ..> EventBus : subscribes
+  ReportGenerator ..> MetricsCollector : reads
+
+  ConsoleUI ..> RestaurantSystem : calls
+  RestaurantSystem ..> PriorityQueue : manages
+  RestaurantSystem ..> OrderService : uses
+  RestaurantSystem ..> PaymentService : uses
+  RestaurantSystem ..> EventBus : publishes
+  </div>
+</div>
+
+<p class="footer">Курсова робота з ООП, 2026 · Рівненський фаховий коледж інформаційних технологій</p>
+
+<script>
+  mermaid.initialize({
+    startOnLoad: true,
+    theme: 'base',
+    themeVariables: {
+      primaryColor: '#EEEDFE',
+      primaryBorderColor: '#534AB7',
+      primaryTextColor: '#26215C',
+      lineColor: '#555',
+      fontSize: '13px',
+      fontFamily: 'Segoe UI, sans-serif'
+    }
+  });
+</script>
+</body>
+</html>
